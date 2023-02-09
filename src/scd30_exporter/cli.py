@@ -1,5 +1,5 @@
 # MIT license
-# Copyright 2023 Sergej Alikov <sergej.alikov@gmail.com>
+# Copyright 2023 Sergej Alikov <sergej@alikov.com>
 
 import argparse
 import importlib.metadata
