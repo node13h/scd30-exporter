@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "scd30-exporter"
-version = "0.1.0"
+version = "0.2.0"
 description = "Prometheus exporter for Adafruit SCD-30 - NDIR CO2 Temperature and Humidity Sensor"
 authors = ["Sergej Alikov <sergej@alikov.com>"]
 license = "MIT"

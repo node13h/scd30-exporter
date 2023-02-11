@@ -16,9 +16,11 @@ logger = logging.getLogger(__name__)
 METRIC_MEASUREMENT_TIME = Summary(
     "scd30_measurement_seconds", "Time spent processing performing measurement"
 )
-METRIC_SENSOR_CO2 = Gauge("scd30_sensor_co2", "CO2 (PPM)")
-METRIC_SENSOR_TEMPERATURE = Gauge("scd30_sensor_temperature", "Temperature (degrees C)")
-METRIC_SENSOR_HUMIDITY = Gauge("scd30_sensor_humidity", "Humidity (%%rH)")
+METRIC_SENSOR_CO2 = Gauge("scd30_sensor_co2", "CO2 (PPM)", ["sensor"])
+METRIC_SENSOR_TEMPERATURE = Gauge(
+    "scd30_sensor_temperature", "Temperature (degrees C)", ["sensor"]
+)
+METRIC_SENSOR_HUMIDITY = Gauge("scd30_sensor_humidity", "Humidity (%%rH)", ["sensor"])
 
 
 def parse_args() -> argparse.Namespace:
@@ -26,6 +28,8 @@ def parse_args() -> argparse.Namespace:
         prog="scd30-exporter",
         description=importlib.metadata.metadata("scd30-exporter")["Summary"],
     )
+
+    parser.add_argument("name", help="sensor name")
 
     parser.add_argument(
         "--log-level",
@@ -74,8 +78,8 @@ def main() -> None:
         logger.debug(
             f"CO2: {co2:.2f} PPM, Temperature: {temp:.2f} °C, Humidity: {humidity:.2f} %%rH"
         )
-        METRIC_SENSOR_CO2.set(co2)
-        METRIC_SENSOR_TEMPERATURE.set(temp)
-        METRIC_SENSOR_HUMIDITY.set(humidity)
+        METRIC_SENSOR_CO2.labels(args.name).set(co2)
+        METRIC_SENSOR_TEMPERATURE.labels(args.name).set(temp)
+        METRIC_SENSOR_HUMIDITY.labels(args.name).set(humidity)
 
         time.sleep(args.interval)
